@@ -1,0 +1,30 @@
+# Downloaded tclxml from sourcesforge
+
+cd External/tclxml/common
+
+mkdir src
+cd src
+unzip ~/Downloads/tclxml-3.2.zip
+
+# Linux
+cd External/tclxml/common/src/tclxml-3.2
+
+base=`cd ../.. && pwd -P`/3.2
+mkdir -p "$base"
+
+# Surprisingly, --prefix does not affect --exec-prefix here and therefore --exec-prefix need to be provided
+./configure \
+  --with-tcl="`cd ../../../../tcl/linux/8.6.4/lib && pwd -P`" \
+  --prefix "$base" \
+  --exec-prefix "$base"
+
+make install
+cd "$base"
+rm -rf include bin lib/*/*.so lib/*/*.a
+tar cjf ../3.2.tbz2 .
+
+# Commit-Host
+cd External/tclxml/common
+rm -rf 3.2/lib/Tclxml3.2 # keep useless TclxmlConfig.sh
+rm -rf src
+
